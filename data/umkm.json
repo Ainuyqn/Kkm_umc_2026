@@ -1,0 +1,87 @@
+[
+  {
+    "id": "UMKM001",
+    "nama": "Keripik Bu Tini",
+    "pemilik": "Ibu Tini",
+    "kategori": "Makanan",
+    "alamat": "Dusun Krajan RT 01, Desa Jagapura Lor",
+    "whatsapp": "6281234567890",
+    "deskripsi": "Usaha keripik singkong dan keripik pisang dengan berbagai varian rasa. Produksi rumahan sejak 2015 dengan cita rasa khas desa.",
+    "foto": "https://images.unsplash.com/photo-1621447504864-d8686e12698c?w=600",
+    "produk": [
+      { "nama": "Keripik Singkong Original", "harga": 10000, "foto": "https://images.unsplash.com/photo-1613919113627-e2089deb3e66?w=400" },
+      { "nama": "Keripik Singkong Balado", "harga": 12000, "foto": "https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=400" },
+      { "nama": "Keripik Pisang Coklat", "harga": 15000, "foto": "https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=400" }
+    ]
+  },
+  {
+    "id": "UMKM002",
+    "nama": "Es Teh Pak Asep",
+    "pemilik": "Bapak Asep",
+    "kategori": "Minuman",
+    "alamat": "Jl. Raya Jagapura Lor No. 12",
+    "whatsapp": "6281345678901",
+    "deskripsi": "Menjual berbagai minuman segar seperti es teh, es jeruk, dan es campur. Menggunakan bahan-bahan alami dari desa.",
+    "foto": "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600",
+    "produk": [
+      { "nama": "Es Teh Manis", "harga": 5000, "foto": "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400" },
+      { "nama": "Es Jeruk Peras", "harga": 8000, "foto": "https://images.unsplash.com/photo-1613478223719-2ab80f613533?w=400" }
+    ]
+  },
+  {
+    "id": "UMKM003",
+    "nama": "Bengkel Tani Makmur",
+    "pemilik": "Pak Joko",
+    "kategori": "Pertanian",
+    "alamat": "Dusun Krajan RT 03, Desa Jagapura Lor",
+    "whatsapp": "6281456789012",
+    "deskripsi": "Menyediakan jasa pengolahan lahan pertanian, penyewaan traktor, dan penjualan pupuk organik.",
+    "foto": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=600",
+    "produk": [
+      { "nama": "Jasa Olah Lahan (per bahu)", "harga": 250000, "foto": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=400" },
+      { "nama": "Pupuk Organik 5kg", "harga": 35000, "foto": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400" }
+    ]
+  },
+  {
+    "id": "UMKM004",
+    "nama": "Jahit Kreatif Sari",
+    "pemilik": "Ibu Sari",
+    "kategori": "Jasa",
+    "alamat": "Dusun Krajan RT 02, Desa Jagapura Lor",
+    "whatsapp": "6281567890123",
+    "deskripsi": "Menerima jasa jahit pakaian, permak, dan pembuatan seragam sekolah maupun instansi.",
+    "foto": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600",
+    "produk": [
+      { "nama": "Jasa Permak Celana", "harga": 25000, "foto": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=400" },
+      { "nama": "Seragam Sekolah (per pcs)", "harga": 125000, "foto": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400" }
+    ]
+  },
+  {
+    "id": "UMKM005",
+    "nama": "Tahu Sumedang Pak Dedi",
+    "pemilik": "Bapak Dedi",
+    "kategori": "Makanan",
+    "alamat": "Jl. Raya Jagapura Lor No. 05",
+    "whatsapp": "6281678901234",
+    "deskripsi": "Produsen tahu sumedang renyah di luar, lembut di dalam. Dibuat dari kedelai pilihan setiap hari.",
+    "foto": "https://images.unsplash.com/photo-1625938144755-652e08e359b7?w=600",
+    "produk": [
+      { "nama": "Tahu Sumedang (10 pcs)", "harga": 10000, "foto": "https://images.unsplash.com/photo-1625938144755-652e08e359b7?w=400" },
+      { "nama": "Tahu Isi Sayur", "harga": 2000, "foto": "https://images.unsplash.com/photo-1625938144755-652e08e359b7?w=400" }
+    ]
+  },
+  {
+    "id": "UMKM006",
+    "nama": "Madu Hutan Asli",
+    "pemilik": "Pak Hasan",
+    "kategori": "Pertanian",
+    "alamat": "Dusun Krajan RT 04, Desa Jagapura Lor",
+    "whatsapp": "6281789012345",
+    "deskripsi": "Memproduksi madu hutan asli dari lebah liar. Dikemas higienis dalam botol 500ml.",
+    "foto": "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600",
+    "produk": [
+      { "nama": "Madu Hutan 500ml", "harga": 75000, "foto": "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400" },
+      { "nama": "Madu Hutan 250ml", "harga": 40000, "foto": "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400" }
+    ]
+  }
+]
