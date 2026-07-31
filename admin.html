@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - UMKM Jagapura Lor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .admin-header {
+      background: linear-gradient(135deg, var(--primary-800), var(--primary-600));
+      color: white;
+      padding: 40px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .admin-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08) 0%, transparent 50%);
+    }
+    
+    .admin-header-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .admin-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .admin-header p {
+      opacity: 0.95;
+      font-size: 1.05rem;
+    }
+    
+    .admin-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .btn-logout {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-size: 0.95rem;
+    }
+    
+    .btn-logout:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .btn-export {
+      background: white;
+      color: var(--primary-700);
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-size: 0.95rem;
+    }
+    
+    .btn-export:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .admin-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+    
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+    
+    @media (max-width: 1024px) {
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .admin-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+    }
+    
+    .admin-card h2 {
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-family: inherit;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      transition: all var(--transition);
+    }
+    
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary-400);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+    
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary-600), var(--primary-500));
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      margin-top: 8px;
+    }
+    
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+    }
+    
+    .btn-add-produk {
+      background: var(--accent);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+    
+    .btn-add-produk:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+    
+    .produk-input-group {
+      background: var(--bg-primary);
+      padding: 16px;
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+    
+    .btn-remove-produk {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--error);
+      color: white;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+    }
+    
+    .btn-remove-produk:hover {
+      transform: scale(1.1);
+    }
+    
+    .umkm-list {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    
+    .umkm-list-item {
+      background: var(--bg-primary);
+      padding: 16px;
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transition: all var(--transition);
+    }
+    
+    .umkm-list-item:hover {
+      border-color: var(--primary-200);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .umkm-list-info {
+      flex: 1;
+    }
+    
+    .umkm-list-info h4 {
+      color: var(--text-primary);
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    
+    .umkm-list-info p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+    
+    .umkm-list-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      font-size: 1rem;
+    }
+    
+    .btn-edit {
+      background: var(--primary-100);
+      color: var(--primary-700);
+    }
+    
+    .btn-edit:hover {
+      background: var(--primary-200);
+    }
+    
+    .btn-delete {
+      background: #fee2e2;
+      color: var(--error);
+    }
+    
+    .btn-delete:hover {
+      background: #fecaca;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    
+    .stat-card {
+      background: var(--bg-secondary);
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+    }
+    
+    .stat-card h3 {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .stat-card .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    
+    .toast {
+      position: fixed;
+      top: 100px;
+      right: 30px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      padding: 16px 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-xl);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 9999;
+      transform: translateX(400px);
+      transition: transform var(--transition);
+      border-left: 4px solid var(--success);
+    }
+    
+    .toast.show {
+      transform: translateX(0);
+    }
+    
+    .toast.error {
+      border-left-color: var(--error);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ADMIN HEADER -->
+  <header class="admin-header">
+    <div class="admin-header-content">
+      <div>
+        <h1>👨‍💼 Admin Dashboard</h1>
+        <p>Kelola data UMKM Desa Jagapura Lor</p>
+      </div>
+      <div class="admin-actions">
+        <button class="btn-export" id="btnExport">
+          📥 Export JSON
+        </button>
+        <button class="btn-logout" id="btnLogout">
+          🚪 Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ADMIN CONTENT -->
+  <div class="admin-content">
+    
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total UMKM</h3>
+        <div class="stat-value" id="statTotalUmkm">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Total Produk</h3>
+        <div class="stat-value" id="statTotalProduk">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Kategori</h3>
+        <div class="stat-value" id="statTotalKategori">0</div>
+      </div>
+    </div>
+
+    <div class="admin-grid">
+      
+      <!-- FORM TAMBAH UMKM -->
+      <div class="admin-card">
+        <h2>➕ Tambah UMKM Baru</h2>
+        
+        <form id="formTambahUmkm">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">ID UMKM *</label>
+              <input type="text" class="form-input" id="umkmId" placeholder="UMKM007" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nama UMKM *</label>
+              <input type="text" class="form-input" id="umkmNama" placeholder="Nama usaha" required>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Pemilik *</label>
+              <input type="text" class="form-input" id="umkmPemilik" placeholder="Nama pemilik" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Kategori *</label>
+              <select class="form-select" id="umkmKategori" required>
+                <option value="">Pilih Kategori</option>
+                <option value="Makanan">Makanan</option>
+                <option value="Minuman">Minuman</option>
+                <option value="Jasa">Jasa</option>
+                <option value="Pertanian">Pertanian</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Alamat *</label>
+            <input type="text" class="form-input" id="umkmAlamat" placeholder="Alamat lengkap" required>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">WhatsApp *</label>
+              <input type="text" class="form-input" id="umkmWhatsapp" placeholder="628xxxxxxxxxx" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">URL Foto</label>
+              <input type="url" class="form-input" id="umkmFoto" placeholder="https://...">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Deskripsi *</label>
+            <textarea class="form-textarea" id="umkmDeskripsi" placeholder="Deskripsi usaha..." required></textarea>
+          </div>
+          
+          <h3 style="margin: 24px 0 16px; color: var(--text-primary); font-size: 1.1rem;"> Produk/Layanan</h3>
+          
+          <button type="button" class="btn-add-produk" id="btnAddProduk">
+            + Tambah Produk
+          </button>
+          
+          <div id="produkList">
+            <!-- Produk inputs will be added here -->
+          </div>
+          
+          <button type="submit" class="btn-submit">
+            💾 Simpan UMKM
+          </button>
+        </form>
+      </div>
+
+      <!-- DAFTAR UMKM -->
+      <div class="admin-card">
+        <h2> Daftar UMKM</h2>
+        
+        <div class="umkm-list" id="umkmList">
+          <!-- UMKM list will be rendered here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toastIcon">✅</span>
+    <span id="toastMessage">Berhasil!</span>
+  </div>
+
+  <script>
+    // Check if logged in
+    if (localStorage.getItem('adminLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+
+    // Load data
+    let umkmData = [];
+    let produkCounter = 0;
+
+    async function loadData() {
+      try {
+        const res = await fetch('data/umkm.json');
+        umkmData = await res.json();
+        
+        // Load from localStorage if exists
+        const localData = localStorage.getItem('umkmData');
+        if (localData) {
+          const parsed = JSON.parse(localData);
+          // Merge: prioritize local data
+          umkmData = [...parsed, ...umkmData.filter(u => !parsed.find(p => p.id === u.id))];
+        }
+        
+        updateStats();
+        renderUmkmList();
+      } catch (err) {
+        console.error('Error loading data:', err);
+        showToast('Gagal memuat data', 'error');
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('statTotalUmkm').textContent = umkmData.length;
+      document.getElementById('statTotalProduk').textContent = 
+        umkmData.reduce((sum, u) => sum + (u.produk?.length || 0), 0);
+      document.getElementById('statTotalKategori').textContent = 
+        new Set(umkmData.map(u => u.kategori)).size;
+    }
+
+    function renderUmkmList() {
+      const list = document.getElementById('umkmList');
+      
+      if (umkmData.length === 0) {
+        list.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 40px;">Belum ada data UMKM</p>';
+        return;
+      }
+      
+      list.innerHTML = umkmData.map(u => `
+        <div class="umkm-list-item">
+          <div class="umkm-list-info">
+            <h4>${u.nama}</h4>
+            <p>${u.kategori} • ${u.pemilik} • ${u.produk?.length || 0} produk</p>
+          </div>
+          <div class="umkm-list-actions">
+            <button class="btn-icon btn-edit" onclick="editUmkm('${u.id}')" title="Edit">
+              ✏️
+            </button>
+            <button class="btn-icon btn-delete" onclick="deleteUmkm('${u.id}')" title="Hapus">
+              🗑️
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Add produk input
+    document.getElementById('btnAddProduk').addEventListener('click', () => {
+      produkCounter++;
+      const produkList = document.getElementById('produkList');
+      
+      const produkDiv = document.createElement('div');
+      produkDiv.className = 'produk-input-group';
+      produkDiv.id = `produk-${produkCounter}`;
+      
+      produkDiv.innerHTML = `
+        <button type="button" class="btn-remove-produk" onclick="removeProduk(${produkCounter})">
+          ×
+        </button>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Nama Produk</label>
+            <input type="text" class="form-input produk-nama" placeholder="Nama produk" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Harga</label>
+            <input type="number" class="form-input produk-harga" placeholder="10000" required>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 0; margin-top: 12px;">
+          <label class="form-label">URL Foto Produk</label>
+          <input type="url" class="form-input produk-foto" placeholder="https://...">
+        </div>
+      `;
+      
+      produkList.appendChild(produkDiv);
+    });
+
+    function removeProduk(id) {
+      const produk = document.getElementById(`produk-${id}`);
+      if (produk) {
+        produk.remove();
+      }
+    }
+
+    // Form submit
+    document.getElementById('formTambahUmkm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const id = document.getElementById('umkmId').value.trim();
+      
+      // Check if ID exists
+      if (umkmData.find(u => u.id === id)) {
+        showToast('ID UMKM sudah ada!', 'error');
+        return;
+      }
+      
+      // Collect produk
+      const produkElements = document.querySelectorAll('.produk-input-group');
+      const produk = [];
+      
+      produkElements.forEach(el => {
+        const nama = el.querySelector('.produk-nama').value.trim();
+        const harga = parseInt(el.querySelector('.produk-harga').value);
+        const foto = el.querySelector('.produk-foto').value.trim();
+        
+        if (nama && harga) {
+          produk.push({
+            nama,
+            harga,
+            foto: foto || 'https://via.placeholder.com/400x300?text=Produk'
+          });
+        }
+      });
+      
+      const newUmkm = {
+        id,
+        nama: document.getElementById('umkmNama').value.trim(),
+        pemilik: document.getElementById('umkmPemilik').value.trim(),
+        kategori: document.getElementById('umkmKategori').value,
+        alamat: document.getElementById('umkmAlamat').value.trim(),
+        whatsapp: document.getElementById('umkmWhatsapp').value.trim(),
+        foto: document.getElementById('umkmFoto').value.trim() || 'https://via.placeholder.com/600x400?text=UMKM',
+        deskripsi: document.getElementById('umkmDeskripsi').value.trim(),
+        produk
+      };
+      
+      umkmData.push(newUmkm);
+      
+      // Save to localStorage
+      localStorage.setItem('umkmData', JSON.stringify(umkmData));
+      
+      updateStats();
+      renderUmkmList();
+      
+      // Reset form
+      e.target.reset();
+      document.getElementById('produkList').innerHTML = '';
+      produkCounter = 0;
+      
+      showToast('UMKM berhasil ditambahkan!');
+    });
+
+    function editUmkm(id) {
+      const umkm = umkmData.find(u => u.id === id);
+      if (!umkm) return;
+      
+      // Fill form
+      document.getElementById('umkmId').value = umkm.id;
+      document.getElementById('umkmNama').value = umkm.nama;
+      document.getElementById('umkmPemilik').value = umkm.pemilik;
+      document.getElementById('umkmKategori').value = umkm.kategori;
+      document.getElementById('umkmAlamat').value = umkm.alamat;
+      document.getElementById('umkmWhatsapp').value = umkm.whatsapp;
+      document.getElementById('umkmFoto').value = umkm.foto;
+      document.getElementById('umkmDeskripsi').value = umkm.deskripsi;
+      
+      // Clear and add produk
+      document.getElementById('produkList').innerHTML = '';
+      produkCounter = 0;
+      
+      if (umkm.produk) {
+        umkm.produk.forEach(p => {
+          produkCounter++;
+          const produkList = document.getElementById('produkList');
+          const produkDiv = document.createElement('div');
+          produkDiv.className = 'produk-input-group';
+          produkDiv.id = `produk-${produkCounter}`;
+          
+          produkDiv.innerHTML = `
+            <button type="button" class="btn-remove-produk" onclick="removeProduk(${produkCounter})">
+              ×
+            </button>
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Nama Produk</label>
+                <input type="text" class="form-input produk-nama" value="${p.nama}" required>
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Harga</label>
+                <input type="number" class="form-input produk-harga" value="${p.harga}" required>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 0; margin-top: 12px;">
+              <label class="form-label">URL Foto Produk</label>
+              <input type="url" class="form-input produk-foto" value="${p.foto}">
+            </div>
+          `;
+          
+          produkList.appendChild(produkDiv);
+        });
+      }
+      
+      // Remove old one
+      deleteUmkm(id, false);
+      
+      showToast('Data dimuat untuk edit');
+    }
+
+    function deleteUmkm(id, confirm = true) {
+      if (confirm && !window.confirm('Yakin ingin menghapus UMKM ini?')) {
+        return;
+      }
+      
+      umkmData = umkmData.filter(u => u.id !== id);
+      localStorage.setItem('umkmData', JSON.stringify(umkmData));
+      
+      updateStats();
+      renderUmkmList();
+      
+      if (confirm) {
+        showToast('UMKM berhasil dihapus');
+      }
+    }
+
+    // Export JSON
+    document.getElementById('btnExport').addEventListener('click', () => {
+      const dataStr = JSON.stringify(umkmData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'umkm.json';
+      link.click();
+      
+      URL.revokeObjectURL(url);
+      
+      showToast('JSON berhasil diexport!');
+    });
+
+    // Logout
+    document.getElementById('btnLogout').addEventListener('click', () => {
+      if (confirm('Yakin ingin logout?')) {
+        localStorage.removeItem('adminLoggedIn');
+        localStorage.removeItem('adminUsername');
+        window.location.href = 'login.html';
+      }
+    });
+
+    // Toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      const toastIcon = document.getElementById('toastIcon');
+      const toastMessage = document.getElementById('toastMessage');
+      
+      toastMessage.textContent = message;
+      toastIcon.textContent = type === 'success' ? '✅' : '⚠️';
+      toast.className = `toast show ${type}`;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Init
+    loadData();
+  </script>
+</body>
+</html>
