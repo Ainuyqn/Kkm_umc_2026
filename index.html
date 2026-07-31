@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Katalog UMKM Desa Jagapura Lor</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+  :root {
+    --primary: #2d6a4f;
+    --secondary: #52b788;
+    --accent: #f77f00;
+    --dark: #1b4332;
+    --light: #f1faee;
+    --gray: #6c757d;
+  }
+  body { background: #f8f9fa; color: #333; line-height: 1.6; }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--primary), var(--dark));
+    color: white; padding: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-content {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .logo { display: flex; align-items: center; gap: 0.8rem; }
+  .logo-icon {
+    width: 45px; height: 45px; background: var(--accent);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+  }
+  .logo h1 { font-size: 1.2rem; }
+  .logo p { font-size: 0.8rem; opacity: 0.9; }
+  nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  nav button {
+    background: rgba(255,255,255,0.15); color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 0.5rem 1rem; border-radius: 20px;
+    cursor: pointer; transition: all 0.3s; font-size: 0.9rem;
+  }
+  nav button:hover, nav button.active { background: var(--accent); border-color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    color: white; padding: 3rem 2rem; text-align: center;
+  }
+  .hero h2 { font-size: 2rem; margin-bottom: 0.5rem; }
+  .hero p { font-size: 1.1rem; opacity: 0.95; max-width: 600px; margin: 0 auto; }
+
+  /* CONTAINER */
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+  /* FILTER & SEARCH */
+  .controls {
+    background: white; padding: 1.5rem; border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 2rem;
+  }
+  .search-box {
+    width: 100%; padding: 0.8rem 1rem; border: 2px solid #e0e0e0;
+    border-radius: 8px; font-size: 1rem; margin-bottom: 1rem;
+    transition: border 0.3s;
+  }
+  .search-box:focus { outline: none; border-color: var(--primary); }
+  .categories { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .cat-btn {
+    padding: 0.5rem 1rem; border: 2px solid var(--primary);
+    background: white; color: var(--primary); border-radius: 20px;
+    cursor: pointer; transition: all 0.3s; font-size: 0.9rem;
+  }
+  .cat-btn:hover, .cat-btn.active { background: var(--primary); color: white; }
+
+  /* GRID UMKM */
+  .umkm-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .umkm-card {
+    background: white; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s;
+    cursor: pointer;
+  }
+  .umkm-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+  .card-img {
+    width: 100%; height: 200px; background: linear-gradient(135deg, var(--secondary), var(--primary));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 3rem; position: relative;
+  }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .card-badge {
+    position: absolute; top: 10px; right: 10px;
+    background: var(--accent); color: white;
+    padding: 0.3rem 0.8rem; border-radius: 15px;
+    font-size: 0.75rem; font-weight: bold;
+  }
+  .card-body { padding: 1rem; }
+  .card-body h3 { color: var(--dark); margin-bottom: 0.3rem; font-size: 1.1rem; }
+  .card-body .owner { color: var(--gray); font-size: 0.9rem; margin-bottom: 0.5rem; }
+  .card-body .desc {
+    color: #555; font-size: 0.85rem;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; margin-bottom: 0.8rem;
+  }
+  .card-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 0.8rem; border-top: 1px solid #eee;
+  }
+  .card-footer .cat { color: var(--primary); font-size: 0.8rem; font-weight: bold; }
+  .card-footer .year { color: var(--gray); font-size: 0.8rem; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none; position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%; background: rgba(0,0,0,0.7);
+    z-index: 1000; justify-content: center; align-items: center;
+    padding: 1rem; overflow-y: auto;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: white; border-radius: 12px; max-width: 700px; width: 100%;
+    max-height: 90vh; overflow-y: auto; position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 10px; right: 10px;
+    background: rgba(0,0,0,0.5); color: white;
+    width: 35px; height: 35px; border-radius: 50%;
+    border: none; cursor: pointer; font-size: 1.2rem; z-index: 10;
+  }
+  .modal-img {
+    width: 100%; height: 250px;
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 5rem;
+  }
+  .modal-img img { width: 100%; height: 100%; object-fit: cover; }
+  .modal-body { padding: 1.5rem; }
+  .modal-body h2 { color: var(--dark); margin-bottom: 0.3rem; }
+  .modal-body .info-row {
+    display: flex; gap: 0.5rem; margin: 0.5rem 0;
+    padding: 0.5rem; background: #f8f9fa; border-radius: 6px;
+  }
+  .modal-body .info-label { font-weight: bold; color: var(--primary); min-width: 120px; }
+  .product-list { margin-top: 1rem; }
+  .product-item {
+    display: flex; justify-content: space-between;
+    padding: 0.5rem; border-bottom: 1px solid #eee;
+  }
+  .wa-btn {
+    display: block; width: 100%; padding: 0.8rem;
+    background: #25d366; color: white; border: none;
+    border-radius: 8px; font-size: 1rem; cursor: pointer;
+    margin-top: 1rem; text-decoration: none; text-align: center;
+    font-weight: bold;
+  }
+  .wa-btn:hover { background: #1ebe5d; }
+
+  /* ADMIN */
+  .admin-panel { display: none; }
+  .admin-panel.active { display: block; }
+  .admin-header {
+    background: white; padding: 1.5rem; border-radius: 12px;
+    margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .admin-header h2 { color: var(--dark); margin-bottom: 1rem; }
+  .btn {
+    padding: 0.7rem 1.5rem; border: none; border-radius: 8px;
+    cursor: pointer; font-size: 0.95rem; transition: all 0.3s;
+    font-weight: 500;
+  }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--dark); }
+  .btn-danger { background: #dc3545; color: white; }
+  .btn-danger:hover { background: #b02a37; }
+  .btn-warning { background: var(--accent); color: white; }
+  .btn-warning:hover { background: #d66d00; }
+
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; margin-bottom: 0.3rem; font-weight: 500; color: var(--dark); }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 0.6rem; border: 2px solid #e0e0e0;
+    border-radius: 6px; font-size: 0.95rem; font-family: inherit;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none; border-color: var(--primary);
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .data-table {
+    width: 100%; background: white; border-radius: 12px;
+    overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .data-table table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    background: var(--primary); color: white;
+    padding: 0.8rem; text-align: left; font-size: 0.9rem;
+  }
+  .data-table td { padding: 0.8rem; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+  .data-table tr:hover { background: #f8f9fa; }
+  .action-btns { display: flex; gap: 0.3rem; }
+  .action-btns button { padding: 0.4rem 0.7rem; font-size: 0.8rem; }
+
+  /* LOGIN */
+  .login-box {
+    max-width: 400px; margin: 3rem auto; background: white;
+    padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  .login-box h2 { color: var(--dark); margin-bottom: 1.5rem; text-align: center; }
+
+  /* QR */
+  .qr-box { text-align: center; padding: 2rem; }
+  #qrcode { display: inline-block; padding: 1rem; background: white; border-radius: 8px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark); color: white;
+    padding: 2rem; text-align: center; margin-top: 3rem;
+  }
+  footer p { opacity: 0.9; font-size: 0.9rem; }
+
+  /* ALERT */
+  .alert {
+    padding: 0.8rem 1rem; border-radius: 6px; margin-bottom: 1rem;
+    display: none;
+  }
+  .alert.show { display: block; }
+  .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+  /* PRINT */
+  @media print {
+    header, nav, .controls, .hero, footer, .admin-panel { display: none !important; }
+    .umkm-card { page-break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+    .umkm-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .hero h2 { font-size: 1.5rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .data-table { overflow-x: auto; }
+    .header-content { flex-direction: column; }
+  }
+
+  .empty-state {
+    text-align: center; padding: 3rem; color: var(--gray);
+  }
+  .empty-state .icon { font-size: 4rem; margin-bottom: 1rem; }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem; margin-bottom: 1.5rem;
+  }
+  .stat-card {
+    background: white; padding: 1.2rem; border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center;
+  }
+  .stat-card .num { font-size: 2rem; font-weight: bold; color: var(--primary); }
+  .stat-card .label { color: var(--gray); font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-content">
+    <div class="logo">
+      <div class="logo-icon">🏪</div>
+      <div>
+        <h1>UMKM Jagapura Lor</h1>
+        <p>Katalog Digital Desa</p>
+      </div>
+    </div>
+    <nav>
+      <button onclick="showPage('katalog')" class="active" id="nav-katalog">📖 Katalog</button>
+      <button onclick="showPage('tentang')" id="nav-tentang">ℹ️ Tentang</button>
+      <button onclick="showPage('qr')" id="nav-qr">📱 QR Code</button>
+      <button onclick="showPage('admin')" id="nav-admin">🔐 Admin</button>
+    </nav>
+  </div>
+</header>
+
+<!-- PAGE: KATALOG -->
+<div id="page-katalog">
+  <div class="hero">
+    <h2>🌾 Selamat Datang di Katalog UMKM</h2>
+    <p>Temukan produk unggulan dari pelaku usaha Desa Jagapura Lor</p>
+  </div>
+
+  <div class="container">
+    <div class="controls">
+      <input type="text" class="search-box" id="searchInput" placeholder="🔍 Cari UMKM atau produk..." oninput="renderKatalog()">
+      <div class="categories" id="categoryFilter"></div>
+    </div>
+    <div class="umkm-grid" id="umkmGrid"></div>
+  </div>
+</div>
+
+<!-- PAGE: TENTANG -->
+<div id="page-tentang" style="display:none;">
+  <div class="container">
+    <div class="admin-header">
+      <h2>ℹ️ Tentang Katalog Ini</h2>
+      <p style="margin-bottom:1rem;">Katalog Digital UMKM Desa Jagapura Lor adalah hasil program kerja KKM yang bertujuan mendigitalisasi data pelaku usaha di desa.</p>
+      <h3 style="color:var(--primary); margin:1rem 0 0.5rem;">📌 Tujuan:</h3>
+      <ul style="padding-left:1.5rem;">
+        <li>Mendigitalisasi data UMKM desa</li>
+        <li>Mempermudah masyarakat menemukan produk lokal</li>
+        <li>Meningkatkan promosi pelaku usaha</li>
+        <li>Menyediakan database UMKM untuk pemerintah desa</li>
+      </ul>
+      <h3 style="color:var(--primary); margin:1rem 0 0.5rem;">👥 Sasaran:</h3>
+      <ul style="padding-left:1.5rem;">
+        <li>Pelaku UMKM Desa Jagapura Lor</li>
+        <li>Masyarakat umum</li>
+        <li>Pemerintah Desa</li>
+      </ul>
+      <h3 style="color:var(--primary); margin:1rem 0 0.5rem;">📞 Kontak Admin:</h3>
+      <p>Kantor Desa Jagapura Lor | WhatsApp: 08xx-xxxx-xxxx</p>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: QR -->
+<div id="page-qr" style="display:none;">
+  <div class="container">
+    <div class="admin-header qr-box">
+      <h2>📱 QR Code Katalog</h2>
+      <p style="margin-bottom:1rem;">Scan QR ini untuk membagikan katalog ke masyarakat</p>
+      <div id="qrcode"></div>
+      <p style="margin-top:1rem; color:var(--gray); font-size:0.9rem;">
+        Cetak dan tempel di kantor desa, balai warga, atau tempat umum
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: ADMIN -->
+<div id="page-admin" style="display:none;">
+  <div class="container">
+    <!-- LOGIN -->
+    <div id="loginBox" class="login-box">
+      <h2>🔐 Login Admin</h2>
+      <div id="loginAlert" class="alert alert-error"></div>
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="loginUser" value="admin">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPass" placeholder="Default: admin123">
+      </div>
+      <button class="btn btn-primary" style="width:100%;" onclick="doLogin()">Masuk</button>
+      <p style="margin-top:1rem; font-size:0.85rem; color:var(--gray); text-align:center;">
+        Default: admin / admin123
+      </p>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" style="display:none;">
+      <div class="admin-header">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h2>📊 Dashboard Admin</h2>
+            <p style="color:var(--gray);">Kelola data UMKM Desa Jagapura Lor</p>
+          </div>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="openForm()">➕ Tambah UMKM</button>
+            <button class="btn btn-warning" onclick="exportPDF()">📄 Export PDF</button>
+            <button class="btn btn-danger" onclick="doLogout()">🚪 Logout</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats" id="statsBox"></div>
+
+      <div id="formAlert" class="alert"></div>
+
+      <!-- FORM -->
+      <div id="formBox" style="display:none;" class="admin-header">
+        <h2 id="formTitle">➕ Tambah UMKM</h2>
+        <form id="umkmForm" onsubmit="saveUMKM(event)">
+          <input type="hidden" id="editId">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nama UMKM *</label>
+              <input type="text" id="f_nama" required>
+            </div>
+            <div class="form-group">
+              <label>Nama Pemilik *</label>
+              <input type="text" id="f_pemilik" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Kategori *</label>
+              <select id="f_kategori" required>
+                <option value="">-- Pilih --</option>
+                <option>Makanan</option>
+                <option>Minuman</option>
+                <option>Kerajinan</option>
+                <option>Pertanian</option>
+                <option>Jasa</option>
+                <option>Lainnya</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tahun Berdiri *</label>
+              <input type="number" id="f_tahun" min="1900" max="2026" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Alamat *</label>
+            <input type="text" id="f_alamat" required placeholder="RT/RW, Desa Jagapura Lor">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nomor WhatsApp *</label>
+              <input type="text" id="f_wa" required placeholder="628123456789">
+            </div>
+            <div class="form-group">
+              <label>URL Foto (opsional)</label>
+              <input type="url" id="f_foto" placeholder="https://...">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Deskripsi Usaha *</label>
+            <textarea id="f_desk" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Produk (format: Nama|Harga, pisahkan dengan koma)</label>
+            <textarea id="f_produk" rows="2" placeholder="Keripik Original|15000, Keripik Pedas|17000"></textarea>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="f_izin" checked> Izinkan ditampilkan di katalog publik
+            </label>
+          </div>
+          <div style="display:flex; gap:0.5rem;">
+            <button type="submit" class="btn btn-primary">💾 Simpan</button>
+            <button type="button" class="btn btn-danger" onclick="closeForm()">Batal</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- TABEL DATA -->
+      <div class="data-table">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nama UMKM</th>
+              <th>Pemilik</th>
+              <th>Kategori</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-img" id="modalImg">🏪</div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>Katalog Digital UMKM Desa Jagapura Lor</strong></p>
+  <p>Program Kerja KKM © 2026 | Dibuat dengan ❤️ untuk masyarakat desa</p>
+</footer>
+
+<script>
+// ============ DATA ============
+const STORAGE_KEY = 'umkm_jagapuralor';
+const ADMIN_CRED = { user: 'admin', pass: 'admin123' };
+
+// Data sample awal
+const sampleData = [
+  {
+    id: 'UMKM001', nama: 'Keripik Singkong Bu Sari', pemilik: 'Ibu Sari',
+    kategori: 'Makanan', alamat: 'RT 01/RW 02, Dsn. Krajan',
+    whatsapp: '6281234567890', tahunBerdiri: 2015,
+    deskripsi: 'Keripik singkong aneka rasa, diproduksi secara tradisional dengan bahan pilihan.',
+    produk: [{nama:'Keripik Original',harga:15000},{nama:'Keripik Pedas',harga:17000},{nama:'Keripik Balado',harga:17000}],
+    foto: '', izinPublikasi: true
+  },
+  {
+    id: 'UMKM002', nama: 'Emping Melinjo Pak Joko', pemilik: 'Pak Joko',
+    kategori: 'Makanan', alamat: 'RT 03/RW 01, Dsn. Krajan',
+    whatsapp: '6281234567891', tahunBerdiri: 2010,
+    deskripsi: 'Emping melinjo asli Jagapura Lor, renyah dan gurih, cocok untuk oleh-oleh.',
+    produk: [{nama:'Emping Original',harga:25000},{nama:'Emping Pedas',harga:28000}],
+    foto: '', izinPublikasi: true
+  },
+  {
+    id: 'UMKM003', nama: 'Kerajinan Anyaman Bambu', pemilik: 'Pak Ahmad',
+    kategori: 'Kerajinan', alamat: 'RT 02/RW 03, Dsn. Krajan',
+    whatsapp: '6281234567892', tahunBerdiri: 2018,
+    deskripsi: 'Berbagai produk anyaman bambu: tampah, tempat buah, hiasan dinding.',
+    produk: [{nama:'Tampah Kecil',harga:35000},{nama:'Tampah Besar',harga:60000},{nama:'Hiasan Dinding',harga:75000}],
+    foto: '', izinPublikasi: true
+  },
+  {
+    id: 'UMKM004', nama: 'Es Teh Solo Mbak Wati', pemilik: 'Mbak Wati',
+    kategori: 'Minuman', alamat: 'Jl. Raya Jagapura Lor',
+    whatsapp: '6281234567893', tahunBerdiri: 2020,
+    deskripsi: 'Es teh manis segar dengan teh pilihan, buka setiap hari.',
+    produk: [{nama:'Es Teh',harga:5000},{nama:'Es Teh Jumbo',harga:8000}],
+    foto: '', izinPublikasi: true
+  },
+  {
+    id: 'UMKM005', nama: 'Sayuran Segar Pak Tani', pemilik: 'Pak Tani',
+    kategori: 'Pertanian', alamat: 'RT 04/RW 02, Dsn. Krajan',
+    whatsapp: '6281234567894', tahunBerdiri: 2012,
+    deskripsi: 'Menyediakan berbagai sayuran segar hasil panen sendiri.',
+    produk: [{nama:'Bayam (ikat)',harga:3000},{nama:'Kangkung (ikat)',harga:3000},{nama:'Cabai (kg)',harga:45000}],
+    foto: '', izinPublikasi: true
+  }
+];
+
+let dataUMKM = [];
+let currentFilter = 'Semua';
+let isAdminLoggedIn = false;
+
+// ============ INIT ============
+function init() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    dataUMKM = JSON.parse(saved);
+  } else {
+    dataUMKM = sampleData;
+    saveData();
+  }
+  renderCategories();
+  renderKatalog();
+  generateQR();
+}
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(dataUMKM));
+}
+
+// ============ NAVIGATION ============
+function showPage(page) {
+  ['katalog','tentang','qr','admin'].forEach(p => {
+    document.getElementById('page-'+p).style.display = 'none';
+    document.getElementById('nav-'+p).classList.remove('active');
+  });
+  document.getElementById('page-'+page).style.display = 'block';
+  document.getElementById('nav-'+page).classList.add('active');
+  if (page === 'admin') renderAdmin();
+}
+
+// ============ KATALOG ============
+function renderCategories() {
+  const cats = ['Semua', ...new Set(dataUMKM.map(u => u.kategori))];
+  document.getElementById('categoryFilter').innerHTML = cats.map(c =>
+    `<button class="cat-btn ${c===currentFilter?'active':''}" onclick="filterCat('${c}')">${c}</button>`
+  ).join('');
+}
+
+function filterCat(cat) {
+  currentFilter = cat;
+  renderCategories();
+  renderKatalog();
+}
+
+function renderKatalog() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = dataUMKM.filter(u => {
+    if (!u.izinPublikasi) return false;
+    const matchCat = currentFilter === 'Semua' || u.kategori === currentFilter;
+    const matchSearch = !search ||
+      u.nama.toLowerCase().includes(search) ||
+      u.pemilik.toLowerCase().includes(search) ||
+      u.deskripsi.toLowerCase().includes(search) ||
+      (u.produk && u.produk.some(p => p.nama.toLowerCase().includes(search)));
+    return matchCat && matchSearch;
+  });
+
+  const grid = document.getElementById('umkmGrid');
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+      <div class="icon">🔍</div>
+      <h3>Tidak ada UMKM ditemukan</h3>
+      <p>Coba kata kunci lain atau ubah filter kategori</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(u => `
+    <div class="umkm-card" onclick="showDetail('${u.id}')">
+      <div class="card-img">
+        ${u.foto ? `<img src="${u.foto}" alt="${u.nama}">` : '🏪'}
+        <span class="card-badge">${u.kategori}</span>
+      </div>
+      <div class="card-body">
+        <h3>${u.nama}</h3>
+        <p class="owner">👤 ${u.pemilik}</p>
+        <p class="desc">${u.deskripsi}</p>
+        <div class="card-footer">
+          <span class="cat">📍 ${u.alamat.split(',')[0]}</span>
+          <span class="year">📅 ${u.tahunBerdiri}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showDetail(id) {
+  const u = dataUMKM.find(x => x.id === id);
+  if (!u) return;
+  document.getElementById('modalImg').innerHTML = u.foto
+    ? `<img src="${u.foto}" alt="${u.nama}">`
+    : '🏪';
+
+  const produkHTML = u.produk && u.produk.length > 0
+    ? `<div class="product-list">
+        <h4 style="color:var(--primary); margin-bottom:0.5rem;">📦 Daftar Produk:</h4>
+        ${u.produk.map(p => `
+          <div class="product-item">
+            <span>${p.nama}</span>
+            <strong style="color:var(--accent);">Rp ${p.harga.toLocaleString('id-ID')}</strong>
+          </div>
+        `).join('')}
+       </div>`
+    : '';
+
+  document.getElementById('modalBody').innerHTML = `
+    <h2>${u.nama}</h2>
+    <p style="color:var(--gray); margin-bottom:1rem;">${u.kategori} • Berdiri ${u.tahunBerdiri}</p>
+    <div class="info-row"><span class="info-label">👤 Pemilik:</span><span>${u.pemilik}</span></div>
+    <div class="info-row"><span class="info-label">📍 Alamat:</span><span>${u.alamat}</span></div>
+    <div class="info-row"><span class="info-label">📝 Deskripsi:</span><span>${u.deskripsi}</span></div>
+    ${produkHTML}
+    <a href="https://wa.me/${u.whatsapp}" target="_blank" class="wa-btn">
+      💬 Hubungi via WhatsApp
+    </a>
+  `;
+  document.getElementById('detailModal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('detailModal').classList.remove('active');
+}
+
+// ============ ADMIN ============
+function doLogin() {
+  const u = document.getElementById('loginUser').value;
+  const p = document.getElementById('loginPass').value;
+  const alert = document.getElementById('loginAlert');
+  if (u === ADMIN_CRED.user && p === ADMIN_CRED.pass) {
+    isAdminLoggedIn = true;
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    alert.classList.remove('show');
+    renderAdmin();
+  } else {
+    alert.textContent = '❌ Username atau password salah!';
+    alert.classList.add('show');
+  }
+}
+
+function doLogout() {
+  if (!confirm('Yakin ingin logout?')) return;
+  isAdminLoggedIn = false;
+  document.getElementById('loginBox').style.display = 'block';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('loginPass').value = '';
+}
+
+function renderAdmin() {
+  if (!isAdminLoggedIn) return;
+  // Stats
+  const total = dataUMKM.length;
+  const publik = dataUMKM.filter(u => u.izinPublikasi).length;
+  const cats = new Set(dataUMKM.map(u => u.kategori)).size;
+  document.getElementById('statsBox').innerHTML = `
+    <div class="stat-card"><div class="num">${total}</div><div class="label">Total UMKM</div></div>
+    <div class="stat-card"><div class="num">${publik}</div><div class="label">Dipublikasi</div></div>
+    <div class="stat-card"><div class="num">${cats}</div><div class="label">Kategori</div></div>
+    <div class="stat-card"><div class="num">${total-publik}</div><div class="label">Draft</div></div>
+  `;
+  // Table
+  document.getElementById('tableBody').innerHTML = dataUMKM.map(u => `
+    <tr>
+      <td><strong>${u.id}</strong></td>
+      <td>${u.nama}</td>
+      <td>${u.pemilik}</td>
+      <td>${u.kategori}</td>
+      <td>${u.izinPublikasi ? '✅ Publik' : '📝 Draft'}</td>
+      <td class="action-btns">
+        <button class="btn btn-primary" onclick="editUMKM('${u.id}')">✏️</button>
+        <button class="btn btn-danger" onclick="deleteUMKM('${u.id}')">🗑️</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openForm(id = null) {
+  document.getElementById('formBox').style.display = 'block';
+  document.getElementById('umkmForm').reset();
+  document.getElementById('editId').value = '';
+  document.getElementById('f_izin').checked = true;
+  document.getElementById('formTitle').textContent = '➕ Tambah UMKM';
+  document.getElementById('formBox').scrollIntoView({behavior:'smooth'});
+}
+
+function closeForm() {
+  document.getElementById('formBox').style.display = 'none';
+}
+
+function editUMKM(id) {
+  const u = dataUMKM.find(x => x.id === id);
+  if (!u) return;
+  document.getElementById('formBox').style.display = 'block';
+  document.getElementById('formTitle').textContent = '✏️ Edit UMKM';
+  document.getElementById('editId').value = u.id;
+  document.getElementById('f_nama').value = u.nama;
+  document.getElementById('f_pemilik').value = u.pemilik;
+  document.getElementById('f_kategori').value = u.kategori;
+  document.getElementById('f_tahun').value = u.tahunBerdiri;
+  document.getElementById('f_alamat').value = u.alamat;
+  document.getElementById('f_wa').value = u.whatsapp;
+  document.getElementById('f_foto').value = u.foto || '';
+  document.getElementById('f_desk').value = u.deskripsi;
+  document.getElementById('f_produk').value = u.produk ? u.produk.map(p => `${p.nama}|${p.harga}`).join(', ') : '';
+  document.getElementById('f_izin').checked = u.izinPublikasi;
+  document.getElementById('formBox').scrollIntoView({behavior:'smooth'});
+}
+
+function saveUMKM(e) {
+  e.preventDefault();
+  const alert = document.getElementById('formAlert');
+  const editId = document.getElementById('editId').value;
+
+  // Parse produk
+  const produkStr = document.getElementById('f_produk').value.trim();
+  let produk = [];
+  if (produkStr) {
+    produk = produkStr.split(',').map(p => {
+      const [nama, harga] = p.split('|').map(x => x.trim());
+      return { nama: nama || '', harga: parseInt(harga) || 0 };
+    }).filter(p => p.nama);
+  }
+
+  const newData = {
+    id: editId || 'UMKM' + String(dataUMKM.length + 1).padStart(3, '0'),
+    nama: document.getElementById('f_nama').value.trim(),
+    pemilik: document.getElementById('f_pemilik').value.trim(),
+    kategori: document.getElementById('f_kategori').value,
+    tahunBerdiri: parseInt(document.getElementById('f_tahun').value),
+    alamat: document.getElementById('f_alamat').value.trim(),
+    whatsapp: document.getElementById('f_wa').value.trim().replace(/\D/g,''),
+    foto: document.getElementById('f_foto').value.trim(),
+    deskripsi: document.getElementById('f_desk').value.trim(),
+    produk: produk,
+    izinPublikasi: document.getElementById('f_izin').checked
+  };
+
+  // Validasi
+  if (!newData.nama || !newData.pemilik || !newData.kategori || !newData.alamat || !newData.whatsapp || !newData.deskripsi) {
+    alert.className = 'alert alert-error show';
+    alert.textContent = '❌ Semua field wajib harus diisi!';
+    return;
+  }
+
+  if (editId) {
+    const idx = dataUMKM.findIndex(x => x.id === editId);
+    dataUMKM[idx] = newData;
+    alert.className = 'alert alert-success show';
+    alert.textContent = '✅ Data UMKM berhasil diperbarui!';
+  } else {
+    dataUMKM.push(newData);
+    alert.className = 'alert alert-success show';
+    alert.textContent = '✅ Data UMKM berhasil ditambahkan!';
+  }
+
+  saveData();
+  renderAdmin();
+  renderCategories();
+  renderKatalog();
+  setTimeout(() => {
+    closeForm();
+    alert.classList.remove('show');
+  }, 1500);
+}
+
+function deleteUMKM(id) {
+  const u = dataUMKM.find(x => x.id === id);
+  if (!u) return;
+  if (!confirm(`Hapus UMKM "${u.nama}"?`)) return;
+  dataUMKM = dataUMKM.filter(x => x.id !== id);
+  saveData();
+  renderAdmin();
+  renderCategories();
+  renderKatalog();
+}
+
+function exportPDF() {
+  alert('💡 Tekan Ctrl+P (atau Cmd+P di Mac), lalu pilih "Save as PDF" untuk menyimpan katalog.');
+  window.print();
+}
+
+// ============ QR CODE ============
+function generateQR() {
+  const qrDiv = document.getElementById('qrcode');
+  qrDiv.innerHTML = '';
+  // Ganti URL ini dengan URL deployment sebenarnya
+  const url = window.location.href || 'https://katalog-umkm-jagapuralor.desa.id';
+  new QRCode(qrDiv, {
+    text: url,
+    width: 200,
+    height: 200,
+    colorDark: '#1b4332',
+    colorLight: '#ffffff'
+  });
+}
+
+// Close modal on overlay click
+document.getElementById('detailModal').addEventListener('click', e => {
+  if (e.target.id === 'detailModal') closeModal();
+});
+
+// INIT
+init();
+</script>
+</body>
+</html>
